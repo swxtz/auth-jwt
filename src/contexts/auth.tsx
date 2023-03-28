@@ -74,5 +74,11 @@ export function AuthProvider(children: any) {
     localStorage.removeItem("user_token");
   }
 
-  return <AuthContext.Provider value={1}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{ user, signed: !!user, signin, singup, signout }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
