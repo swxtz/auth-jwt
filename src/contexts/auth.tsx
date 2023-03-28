@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext } from "react";
+import { useState, useEffect, createContext, ReactNode } from "react";
 
 export const AuthContext = createContext({});
 
@@ -12,7 +12,7 @@ interface IUser {
   password: string;
 }
 
-export function AuthProvider(children: any) {
+export function AuthProvider({ children }: { children: ReactNode}) {
   const [user, setUser] = useState({} || null);
 
   useEffect(() => {
@@ -77,8 +77,7 @@ export function AuthProvider(children: any) {
   return (
     <AuthContext.Provider
       value={{ user, signed: !!user, signin, singup, signout }}
-    >
-      {children}
-    </AuthContext.Provider>
+      children={children}
+    />
   );
 }
