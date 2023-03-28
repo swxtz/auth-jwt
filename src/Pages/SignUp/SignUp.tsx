@@ -1,3 +1,5 @@
 export function SignUp() {
-  return ();
+  return (
+    <h1>Conta</h1>
+  );
 }

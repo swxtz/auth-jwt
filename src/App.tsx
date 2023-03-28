@@ -1,5 +1,7 @@
+import { RoutesApp } from "./Routes/Routes";
+
 export function App() {
   return (
-    <Home />
+    <RoutesApp /> 
   );
 }
