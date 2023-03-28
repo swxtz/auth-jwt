@@ -13,7 +13,7 @@ interface IUser {
 }
 
 export function AuthProvider(children: any) {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({} || null);
 
   useEffect(() => {
     const userToken = localStorage.getItem("user_token");
@@ -31,17 +31,48 @@ export function AuthProvider(children: any) {
   function signin({ email, password }: ISignin) {
     const usersStorage = JSON.parse(localStorage.getItem("users_db") || "{}");
 
-    const hasUser = usersStorage?.filter((user:IUser) => user.email === email);
+    const hasUser = usersStorage?.filter((user: IUser) => user.email === email);
 
-    if(hasUser?.length) {
-      if(hasUser[0].email === email && hasUser[0].password === password) {
+    if (hasUser?.length) {
+      if (hasUser[0].email === email && hasUser[0].password === password) {
         const token = Math.random().toString(36).substring(2);
-        localStorage.setItem("users_token", JSON.stringify({email, token}));
-        setUser({ email, password});
+        localStorage.setItem("users_token", JSON.stringify({ email, token }));
+        setUser({ email, password });
         return;
+      } else {
+        return "E-mail ou senha incorretos";
       }
+    } else {
+      return "Usuario não cadastrado";
     }
   }
 
-  return <AuthContext.Provider children={children} value={false} />;
+  function singup({ email, password }: ISignin) {
+    const usersStorage = JSON.parse(localStorage.getItem("users_db") || "{}");
+
+    const hasUser = usersStorage?.filter((user: IUser) => user.email === email);
+
+    if (hasUser?.length) {
+      return "Já tem uma conta com esse E-mail";
+    }
+
+    let newUser;
+
+    if (usersStorage) {
+      newUser = [...usersStorage, { email, password }];
+    } else {
+      newUser = [{ email, password }];
+    }
+
+    localStorage.setItem("users_db", JSON.stringify(newUser));
+
+    return;
+  }
+
+  function signout() {
+    setUser(null);
+    localStorage.removeItem("user_token");
+  }
+
+  return <AuthContext.Provider value={1}>{children}</AuthContext.Provider>;
 }
